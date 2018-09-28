@@ -7,3 +7,5 @@ SRAdb
 GEOquery
 
 Python
+
+sratoolkit
