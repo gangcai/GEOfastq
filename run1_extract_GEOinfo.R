@@ -1,0 +1,21 @@
+library(GEOquery)
+ps=parseGEO("GSE45719_family.soft.gz")
+gsms=ps@gsms
+results={}
+i=0
+for(gsm in gsms){
+	i=i+1
+	gsm_id=gsms[[i]]@header$geo_accession
+	gsm_title=gsms[[i]]@header$title
+	relations=gsms[[i]]@header$relation
+	sra=grep("SRA",relations,perl=TRUE,value=TRUE)[1]
+	print(gsms[[i]]@header$relation)
+	sra_id=strsplit(sra,"=")[[1]][2]
+	name=gsms[[i]]@header$source_name_ch1
+	if(i==1){
+		results=c(gsm_id,gsm_title,name,sra_id)
+	}else{
+		results=rbind(results,c(gsm_id,gsm_title,name,sra_id))
+	}
+}
+write.table(results,file="GSM_info.tsv",sep="\t",quote=F,row.names=F,col.names=F)
